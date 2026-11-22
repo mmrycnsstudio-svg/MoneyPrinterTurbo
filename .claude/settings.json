@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ \"${CLAUDE_CODE_REMOTE:-}\" = \"true\" ]; then bash \"$CLAUDE_PROJECT_DIR/scripts/setup-video-tools.sh\"; fi",
+            "timeout": 600,
+            "statusMessage": "Preparing MoneyPrinterTurbo and Blender"
+          }
+        ]
+      }
+    ]
+  }
+}
