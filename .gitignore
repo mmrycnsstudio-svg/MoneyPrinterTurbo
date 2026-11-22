@@ -52,3 +52,4 @@ token.json
 kanal.json
 .secrets/
 /deploy/*.env
+!test/doksan_yayin/test_*.py
