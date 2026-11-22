@@ -1,0 +1,21 @@
+# Docker kullanılmıyorsa alternatif: sudo cp deploy/doksan-yayin.service /etc/systemd/system/
+# sudo systemctl daemon-reload && sudo systemctl enable --now doksan-yayin
+[Unit]
+Description=Doksan Arti otomatik YouTube yayin servisi
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/opt/mrycns/MoneyPrinterTurbo
+Environment=DOKSAN_GIZLI_DIZIN=/opt/mrycns/secrets/doksan-arti
+Environment=DOKSAN_MPT_API=http://127.0.0.1:8080/api/v1
+EnvironmentFile=-/opt/mrycns/secrets/doksan-arti/ayarlar.env
+ExecStart=/opt/mrycns/MoneyPrinterTurbo/.venv/bin/python -m doksan_yayin servis
+Restart=always
+RestartSec=15
+KillSignal=SIGTERM
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

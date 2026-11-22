@@ -45,3 +45,10 @@ htmlcov/
 
 # Claude Code 订阅令牌（docker compose 自动读取），禁止提交
 .env
+
+# Doksan Artı yayın: gizli dosyalar asla depoya girmez
+client_secret*.json
+token.json
+kanal.json
+.secrets/
+/deploy/*.env

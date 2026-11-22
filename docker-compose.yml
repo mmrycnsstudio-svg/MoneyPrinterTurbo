@@ -22,3 +22,27 @@ services:
     command: [ "python3", "main.py" ]
     volumes: *common-volumes
     restart: always
+  doksan-yayin:
+    # Doksan Artı otomatik YouTube yayını: kalite kontrol -> yükleme -> işlenme kontrolü.
+    # Sohbetten bağımsız çalışır; yeniden başlatılınca kuyruktan devam eder.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "doksan-yayin"
+    command: [ "python3", "-m", "doksan_yayin", "servis" ]
+    volumes:
+      - ./:/MoneyPrinterTurbo
+      # Gizli dosyalar (OAuth istemcisi, yenileme tokenı, kanal kimliği) depo DIŞINDA.
+      - ${DOKSAN_GIZLI_HOST:-/opt/mrycns/secrets/doksan-arti}:/secrets
+    environment:
+      DOKSAN_GIZLI_DIZIN: /secrets
+      DOKSAN_MPT_API: http://api:8080/api/v1
+      DOKSAN_GORUNURLUK: ${DOKSAN_GORUNURLUK:-public}
+      DOKSAN_MPT_KONU_DESENI: ${DOKSAN_MPT_KONU_DESENI:-}
+      DOKSAN_KAYNAK_ZORUNLU: ${DOKSAN_KAYNAK_ZORUNLU:-true}
+      DOKSAN_BILDIRIM_URL: ${DOKSAN_BILDIRIM_URL:-}
+      DOKSAN_MPT_API_ANAHTARI: ${DOKSAN_MPT_API_ANAHTARI:-}
+    depends_on:
+      - api
+    stop_grace_period: 60s
+    restart: unless-stopped
